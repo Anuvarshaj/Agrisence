@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Smart Farm</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- 🌿 Welcome Section -->
+<header class="welcome">
+    <h1>AgriSense
+        🌱</h1>
+    <p>Your digital gardening assistant for healthy crops</p>
+</header>
+
+<!-- 🍃 Floating garden elements -->
+<div class="garden">
+    <span></span><span></span><span></span><span></span>
+</div>
+
+<!-- 🌾 Main Content -->
+<div class="main-container">
+
+    <!-- 🌱 Input Box -->
+    <div class="card input-card">
+        <h2>Crop Analysis</h2>
+
+        <select id="plant">
+            <option>Tomato</option>
+            <option>Rose</option>
+            <option>Cucumber</option>
+            <option>Brinjal</option>
+            <option>Chilli</option>
+            <option>Beans</option>
+            <option>Chickoo</option>
+            <option>Snake Plant</option>
+        </select>
+
+        <input type="number" placeholder="Soil Moisture (%)" id="moisture">
+        <input type="number" placeholder="Soil pH" id="ph">
+        <input type="number" placeholder="Nitrogen (N)" id="n">
+        <input type="number" placeholder="Phosphorus (P)" id="p">
+        <input type="number" placeholder="Potassium (K)" id="k">
+        <input type="number" placeholder="Temperature (°C)" id="temp">
+        <input type="number" placeholder="Humidity (%)" id="hum">
+
+        <button onclick="analyze()">🌿 Analyze Crop</button>
+    </div>
+
+    <!-- 🌻 Suggestion Box -->
+    <div class="card output-card">
+        <h2>Smart Suggestions</h2>
+        <p class="hint">Your crop’s health tips will grow here 🌾</p>
+        <p id="result"></p>
+    </div>
+
+</div>
+
+<script>
+function analyze(){
+    fetch('/analyze', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            plant: plant.value,
+            moisture: moisture.value,
+            ph: ph.value,
+            n: n.value,
+            p: p.value,
+            k: k.value,
+            temperature: temp.value,
+            humidity: hum.value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const box = document.querySelector(".output-card");
+        box.classList.remove("show");
+        document.getElementById("result").innerText = data.message;
+        setTimeout(() => box.classList.add("show"), 100);
+    });
+}
+</script>
+
+</body>
+</html>
